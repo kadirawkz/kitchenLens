@@ -44,23 +44,23 @@ KitchenLens leverages a hybrid database and AI orchestration engine. The diagram
 
 ```mermaid
 graph TD
-    User([User Client]) -->|Interacts with| FE[React / Vite Frontend]
-    FE -->|API Requests via Axios| BE[FastAPI Backend]
+    User(["User Client"]) -->|Interacts with| FE["React / Vite Frontend"]
+    FE -->|API Requests via Axios| BE["FastAPI Backend"]
     
-    subgraph Core Backend Services
-        BE -->|Authentication & CRUD| DB[(PostgreSQL Database)]
-        BE -->|Vector Similarity Queries| VDB[(ChromaDB Vector Store)]
-        BE -->|OCR / NLP / RAG Recommender| AI[Google Gemini 1.5 Flash]
+    subgraph CoreBackend["Core Backend Services"]
+        BE -->|Authentication & CRUD| DB[("PostgreSQL Database")]
+        BE -->|Vector Similarity Queries| VDB[("ChromaDB Vector Store")]
+        BE -->|OCR / NLP / RAG Recommender| AI["Google Gemini 1.5 Flash"]
     end
 
-    subgraph Relational Schema (Postgres)
-        DB -->|Stores| Users[User Accounts]
-        DB -->|Stores| Groceries[Grocery Inventory]
-        DB -->|Stores| Spending[Receipt Transactions]
+    subgraph RelationalSchema["Relational Schema (Postgres)"]
+        DB -->|Stores| Users["User Accounts"]
+        DB -->|Stores| Groceries["Grocery Inventory"]
+        DB -->|Stores| Spending["Receipt Transactions"]
     end
 
-    subgraph Vector Schema (ChromaDB)
-        VDB -->|Indexes| Recipes[Culinary Recipes & Ingredients]
+    subgraph VectorSchema["Vector Schema (ChromaDB)"]
+        VDB -->|Indexes| Recipes["Culinary Recipes & Ingredients"]
     end
 ```
 
