@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     CHROMA_PORT: int = int(os.getenv("CHROMA_PORT", "8000"))
     
     # AI - Google Gemini
-    GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")
+    GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "dummy-api-key-for-testing-purposes")
     GEMINI_MODEL: str = "gemini-1.5-flash"
     
     # CORS
