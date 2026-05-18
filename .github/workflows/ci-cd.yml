@@ -66,11 +66,17 @@ jobs:
           docker compose push
           
       - name: Azure Login
+        env:
+          AZURE_CREDS: ${{ secrets.AZURE_CREDENTIALS }}
+        if: env.AZURE_CREDS != ''
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           
       - name: Deploy to Azure Container Apps
+        env:
+          AZURE_CREDS: ${{ secrets.AZURE_CREDENTIALS }}
+        if: env.AZURE_CREDS != ''
         run: |
           # Placeholder for Azure deployment commands
           echo "Deploying to Azure Container Apps..."
