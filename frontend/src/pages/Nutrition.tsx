@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Camera, Scan, ShieldCheck, Upload, Loader2, FileText } from 'lucide-react';
+import { Camera, ShieldCheck, Upload, Loader2, FileText } from 'lucide-react';
 
 const Nutrition = () => {
   const [scanning, setScanning] = useState(false);

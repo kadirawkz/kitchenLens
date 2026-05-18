@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
@@ -7,7 +6,7 @@ import { DollarSign, TrendingUp, PieChart as PieIcon, Loader2 } from 'lucide-rea
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 const Budget = () => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['budget-summary'],
     queryFn: async () => {
       const token = localStorage.getItem('token');
@@ -63,7 +62,7 @@ const Budget = () => {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {breakdownData.map((entry, index) => (
+                  {breakdownData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
