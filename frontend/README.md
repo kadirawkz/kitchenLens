@@ -1,73 +1,90 @@
-# React + TypeScript + Vite
+# KitchenLens - Frontend Client Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This directory contains the user interface client for KitchenLens, built using React, TypeScript, Vite, Tailwind CSS v4, and TanStack Query. It provides a highly responsive, modern dashboard interface for users to manage their kitchen inventories, plan budgets, receive nutrition insights, and interact with the AI recipe assistant.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Technical Stack
 
-## React Compiler
+*   **Runtime and Build**: Node.js 20+ & Vite 8 (TypeScript configuration)
+*   **Core UI Library**: React 19
+*   **Styling and Design System**: Tailwind CSS v4 & Framer Motion
+*   **Data Fetching and Synchronization**: TanStack Query (React Query) v5 & Axios
+*   **Iconography**: Lucide React
+*   **Routing**: React Router DOM v6
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Directory Organization
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+frontend/
+├── public/                 # Static public assets (logos, favicon)
+├── src/                    # Primary application source
+│   ├── api/                # Axios instance configuration and service API endpoints
+│   ├── components/         # Shared component primitives (Layout, ProtectedRoute)
+│   ├── context/            # AuthContext provider for sessions
+│   ├── pages/              # Primary view pages
+│   │   ├── Assistant.tsx   # Contextual Chat RAG Assistant
+│   │   ├── Budget.tsx      # Spending charts & category analytics
+│   │   ├── Dashboard.tsx   # Main inventory and overview widgets
+│   │   ├── Inventory.tsx   # CRUD lists & expiry tracking
+│   │   ├── Login.tsx       # Authentication view
+│   │   ├── Nutrition.tsx   # Vision OCR label summarizer
+│   │   ├── Receipts.tsx    # Receipt Vision scanner
+│   │   ├── Register.tsx    # Registration view
+│   │   └── ShoppingList.tsx# Priority shopping list management
+│   ├── App.tsx             # Root page router
+│   ├── index.css           # Global custom styled CSS layer
+│   └── main.tsx            # Application entrypoint
+├── Dockerfile              # Production Nginx deploy recipe
+├── package.json            # Scripts & project dependencies
+└── tsconfig.json           # Strict TypeScript configuration
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Local Setup
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+*   Node.js 20 or higher
+*   Running KitchenLens Backend API at `http://localhost:8000` (refer to the root README)
+
+### Installation
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development Server
+Run the local Vite development server with Hot Module Replacement (HMR):
+```bash
+npm run dev
 ```
+Open your browser and navigate to [http://localhost:5173](http://localhost:5173).
+
+### Building for Production
+Compile static TypeScript assets and build the optimized production distribution:
+```bash
+npm run build
+```
+The output assets will be populated in the `dist/` directory, ready to be served by any static web server or Nginx.
+
+---
+
+## Quality Assurance and Formatting
+
+To maintain a clean and reliable codebase, the following standard utility scripts are provided:
+
+*   **Format Check**:
+    ```bash
+    npm run lint
+    ```
+    Validates static analysis rules, strict typing compliance, and syntax guidelines across all `.ts` and `.tsx` source files.
+
+---
+*Developed and maintained by Antigravity AI Coding Assistant.*

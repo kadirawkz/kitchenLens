@@ -1,50 +1,113 @@
-# Deployment Guide - Azure Container Apps
+# KitchenLens - Azure Container Apps Deployment Guide
 
-This project is designed to be deployed to **Azure Container Apps (ACA)**.
+This document details the configuration requirements and manual procedures necessary to deploy the full-stack KitchenLens application to Azure Container Apps (ACA).
 
-## Steps to Deploy
+---
 
-### 1. Create Resource Group
+## Architecture Overview in Azure
+
+When deployed to production, the services are orchestrated as separate secure, containerized instances inside a shared Azure Container Apps Environment:
+
+1.  **Backend Service**: An ingress-enabled API container running FastAPI.
+2.  **Frontend Service**: An ingress-enabled web server container running Nginx to host compiled React assets.
+3.  **Database Instance**: An Azure Database for PostgreSQL flexible server (or a managed container instance).
+4.  **Vector Store**: A standalone ChromaDB container instance within the secure environment.
+
+---
+
+## Command Line Deployment Pipeline
+
+Follow these steps using the Azure CLI (`az`) to provision and deploy the system environment.
+
+### 1. Resource Group Creation
+Create a logical group to manage all project resource entities:
 ```bash
-az group create --name foodsafe-rg --location eastus
+az group create --name kitchenlens-rg --location eastus
 ```
 
-### 2. Create Container Registry (ACR)
+### 2. Container Apps Environment Provisioning
+Initialize the secure Container App Environment which acts as the network boundary for the applications:
 ```bash
-az acr create --resource-group foodsafe-rg --name foodsaferegistry --sku Basic
+az containerapp env create \
+  --name kitchenlens-env \
+  --resource-group kitchenlens-rg \
+  --location eastus
 ```
 
-### 3. Create Container App Environment
-```bash
-az containerapp env create --name foodsafe-env --resource-group foodsafe-rg --location eastus
-```
-
-### 4. Deploy Backend
+### 3. Deploy ChromaDB Vector Store
+Deploy a standalone ChromaDB container within the environment. This container does not require public internet ingress as it is accessed internally by the backend API:
 ```bash
 az containerapp create \
-  --name foodsafe-backend \
-  --resource-group foodsafe-rg \
-  --environment foodsafe-env \
-  --image foodsaferegistry.azurecr.io/backend:latest \
+  --name kitchenlens-chroma \
+  --resource-group kitchenlens-rg \
+  --environment kitchenlens-env \
+  --image chromadb/chroma:0.4.24 \
+  --target-port 8000 \
+  --ingress internal
+```
+
+### 4. Deploy Backend API
+Deploy the Python FastAPI backend service, enabling public ingress on port 8000:
+```bash
+az containerapp create \
+  --name kitchenlens-backend \
+  --resource-group kitchenlens-rg \
+  --environment kitchenlens-env \
+  --image ghcr.io/<your-github-username>/kitchenlens-backend:latest \
   --target-port 8000 \
   --ingress external \
-  --env-vars GOOGLE_API_KEY=secret SECRET_KEY=secret
+  --env-vars \
+    GOOGLE_API_KEY="<your-gemini-key>" \
+    SECRET_KEY="<your-auth-secret>" \
+    POSTGRES_SERVER="<db-server-hostname>" \
+    POSTGRES_USER="<db-username>" \
+    POSTGRES_PASSWORD="<db-password>" \
+    CHROMA_HOST="kitchenlens-chroma" \
+    CHROMA_PORT="8000"
 ```
 
-### 5. Deploy Frontend
+### 5. Deploy Frontend Web App
+Deploy the React web server container with public ingress on port 80:
 ```bash
 az containerapp create \
-  --name foodsafe-frontend \
-  --resource-group foodsafe-rg \
-  --environment foodsafe-env \
-  --image foodsaferegistry.azurecr.io/frontend:latest \
+  --name kitchenlens-frontend \
+  --resource-group kitchenlens-rg \
+  --environment kitchenlens-env \
+  --image ghcr.io/<your-github-username>/kitchenlens-frontend:latest \
   --target-port 80 \
   --ingress external \
-  --env-vars VITE_API_URL=https://foodsafe-backend.azurewebsites.net/api/v1
+  --env-vars \
+    VITE_API_URL="https://kitchenlens-backend.azurewebsites.net/api/v1"
 ```
 
-## GitHub Actions Integration
-The `.github/workflows/ci-cd.yml` file contains the logic to automate these steps. You need to set the following secrets in GitHub:
-- `AZURE_CREDENTIALS`
-- `GHCR_TOKEN`
-- `GOOGLE_API_KEY`
+---
+
+## Continuous Deployment via GitHub Actions
+
+The continuous integration and deployment logic is automated inside `.github/workflows/ci-cd.yml`. The pipeline compiles, tests, and publishes container assets on every push to the `main` branch.
+
+### Required Secrets Configuration
+
+To let the deployment pipeline authenticate with Azure and GitHub Package Registry, you must declare the following secrets inside your GitHub repository settings under **Settings > Secrets and variables > Actions**:
+
+| Secret Key Name | Required Format / Value | Purpose |
+| :--- | :--- | :--- |
+| `AZURE_CREDENTIALS` | Clean JSON output of the Azure Service Principal creation command. | Grants GitHub authorization to log in and deploy resources within your Azure resource group. |
+| `GOOGLE_API_KEY` | Google Gemini API Key string. | Validates access to Gemini AI Vision and text models during backend testing. |
+
+### Generating the `AZURE_CREDENTIALS` Token
+
+To create a secure Active Directory Service Principal with scoped contributor permissions over your resource group, run the following command in your terminal:
+
+```bash
+az ad sp create-for-rbac \
+  --name "kitchenlens-github-actions" \
+  --role contributor \
+  --scopes /subscriptions/<your-subscription-id>/resourceGroups/kitchenlens-rg \
+  --sdk-auth
+```
+
+Copy the entire JSON output block generated by the CLI, and paste it directly as the value of the **`AZURE_CREDENTIALS`** repository secret in GitHub.
+
+---
+*Document author: Antigravity AI Coding Assistant.*

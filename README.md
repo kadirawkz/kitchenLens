@@ -1,4 +1,4 @@
-# 🍳 KitchenLens — Smart Home Food & Grocery Assistant
+# KitchenLens - Smart Home Food and Grocery Assistant
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
@@ -6,39 +6,39 @@
 [![Gemini](https://img.shields.io/badge/Google_Gemini-1.5_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://aistudio.google.com/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-**KitchenLens** is a modern, high-performance, and secure full-stack application designed to help users intelligently manage groceries, track food expiration, and reduce food waste using state-of-the-art AI. 
+KitchenLens is a modern, high-performance, and secure full-stack application designed to help users intelligently manage groceries, track food expiration, and reduce food waste using state-of-the-art AI. 
 
-By combining **FastAPI**, **React (Vite + TypeScript)**, and the **Google Gemini 1.5 Flash** model with a hybrid search architecture (relational inventory metadata in **PostgreSQL** and vector recipe documents in **ChromaDB**), KitchenLens offers a seamless, premium smart kitchen companion.
+By combining FastAPI, React (Vite and TypeScript), and the Google Gemini 1.5 Flash model with a hybrid search architecture (relational inventory metadata in PostgreSQL and vector recipe documents in ChromaDB), KitchenLens offers a seamless, premium smart kitchen companion.
 
 ---
 
-## 📖 Table of Contents
-1. [🚀 Key Features](#-key-features)
-2. [📐 System Architecture](#-system-architecture)
-3. [🛠️ Tech Stack](#️-tech-stack)
-4. [🏃 How to Run Locally](#-how-to-run-locally)
+## Table of Contents
+1. [Key Features](#key-features)
+2. [System Architecture](#system-architecture)
+3. [Tech Stack](#tech-stack)
+4. [How to Run Locally](#how-to-run-locally)
    - [Option A: Quick Start with Docker (Recommended)](#option-a-quick-start-with-docker-recommended)
    - [Option B: Manual Standalone Setup](#option-b-manual-standalone-setup)
-5. [📂 Directory Structure](#-directory-structure)
-6. [🔐 Configuration & Environment Variables](#-configuration--environment-variables)
-7. [🔧 Troubleshooting Guide](#-troubleshooting-guide)
-8. [🚀 CI/CD & Deployment](#-cicd--deployment)
-9. [⚖️ License](#️-license)
+5. [Directory Structure](#directory-structure)
+6. [Configuration and Environment Variables](#configuration-and-environment-variables)
+7. [Troubleshooting Guide](#troubleshooting-guide)
+8. [CI/CD and Deployment](#cicd-and-deployment)
+9. [License](#license)
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-*   **🥗 Zero Waste Mode**: Intelligently scan ingredients expiring within 3 days and automatically recommend recipes that leverage these items first.
-*   **💬 Recipe RAG Assistant**: An advanced chatbot that answers "What can I cook tonight?" by querying your real-time inventory and finding matching recipes in a high-performance vector database.
-*   **📸 Smart Receipt Scanner**: Upload grocery receipt images; Gemini 1.5 Flash Vision parses the items, calculates unit prices, assigns grocery categories, and registers them into your inventory automatically.
-*   **🍎 Nutrition Summarizer**: Instantly scan or upload nutrition labels to receive clean, actionable visual health insights, warnings about allergens, and sugar/sodium alerts.
-*   **📊 Inventory & Expiry Tracker**: A sleek dashboard tracking grocery levels, categories, and item statuses (Fresh, Expiring Soon, Expired) using high-impact visual indicators and charts.
-*   **💰 Budget Summary**: Track monthly and weekly grocery spending by category (e.g., Produce, Dairy, Meat) and store, with dynamic spending analytics.
+*   **Zero Waste Mode**: Intelligently scan ingredients expiring within 3 days and automatically recommend recipes that leverage these items first.
+*   **Recipe RAG Assistant**: An advanced chatbot that answers "What can I cook tonight?" by querying your real-time inventory and finding matching recipes in a high-performance vector database.
+*   **Smart Receipt Scanner**: Upload grocery receipt images; Gemini 1.5 Flash Vision parses the items, calculates unit prices, assigns grocery categories, and registers them into your inventory automatically.
+*   **Nutrition Summarizer**: Instantly scan or upload nutrition labels to receive clean, actionable visual health insights, warnings about allergens, and sugar/sodium alerts.
+*   **Inventory and Expiry Tracker**: A sleek dashboard tracking grocery levels, categories, and item statuses (Fresh, Expiring Soon, Expired) using high-impact visual indicators and charts.
+*   **Budget Summary**: Track monthly and weekly grocery spending by category (e.g., Produce, Dairy, Meat) and store, with dynamic spending analytics.
 
 ---
 
-## 📐 System Architecture
+## System Architecture
 
 KitchenLens leverages a hybrid database and AI orchestration engine. The diagram below illustrates how client interactions route to FastAPI and leverage both structured relational data and unstructured vector data:
 
@@ -66,7 +66,7 @@ graph TD
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Component / Library | Purpose |
 | :--- | :--- | :--- |
@@ -82,14 +82,14 @@ graph TD
 
 ---
 
-## 🏃 How to Run Locally
+## How to Run Locally
 
 ### Option A: Quick Start with Docker (Recommended)
 
-Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+Make sure you have Docker Desktop installed and running.
 
 #### 1. Clone & Set Up Environments
-Create a `.env` file at the **root** of the repository:
+Create a `.env` file at the root of the repository:
 ```env
 PROJECT_NAME="KitchenLens"
 SECRET_KEY="generate-a-long-random-string-here"
@@ -183,7 +183,7 @@ If you prefer to run the components independently on your host machine without D
 
 ---
 
-## 📂 Directory Structure
+## Directory Structure
 
 Here is a map of the repository structure to help you get oriented:
 
@@ -231,7 +231,7 @@ kitchenLens/
 
 ---
 
-## 🔐 Configuration & Environment Variables
+## Configuration and Environment Variables
 
 | Variable Name | Description | Required? | Default |
 | :--- | :--- | :--- | :--- |
@@ -248,7 +248,7 @@ kitchenLens/
 
 ---
 
-## 🔧 Troubleshooting Guide
+## Troubleshooting Guide
 
 ### 1. "ChromaDB port conflict / Container not starting"
 *   **Cause**: Chroma runs on container port `8000`, which conflicts with the FastAPI server running on host port `8000` if both map to the same local port.
@@ -260,7 +260,7 @@ kitchenLens/
 
 ### 3. "Gemini API Key Unauthorized"
 *   **Cause**: The Gemini API key is missing or invalid.
-*   **Fix**: Ensure you have loaded your key correctly in your `.env` file without leading/trailing quotes and that you have active quota in [Google AI Studio](https://aistudio.google.com/).
+*   **Fix**: Ensure you have loaded your key correctly in your `.env` file without leading/trailing quotes and that you have active quota in Google AI Studio.
 
 ### 4. "CORS Error in Frontend"
 *   **Cause**: Running the frontend manually on a port other than Vite's default or running a backend without CORS origin headers.
@@ -268,18 +268,18 @@ kitchenLens/
 
 ---
 
-## 🚀 CI/CD & Deployment
+## CI/CD and Deployment
 
 This project contains a fully-fledged CI/CD configuration under `.github/workflows/ci-cd.yml` which automates:
 1. Running backend tests with Pytest.
 2. Checking code build status for both frontend and backend.
-3. Deploying images to GitHub Container Registry (GHCR) and pushing them live to **Azure Container Apps (ACA)**.
+3. Deploying images to GitHub Container Registry (GHCR) and pushing them live to Azure Container Apps (ACA).
 
 For a comprehensive guide on setting up manual or automated cloud deployments, please refer to our **[Deployment Guide (docs/deployment.md)](file:///d:/repos/kitchenLens/docs/deployment.md)**.
 
 ---
 
-## ⚖️ License
+## License
 
 Distributed under the MIT License. See `LICENSE` for details.
 
